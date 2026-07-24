@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: google-calendar-sync
+  labels:
+    app.kubernetes.io/name: google-calendar-sync
+spec:
+  replicas: 1
+  # Singleton loop over a ReadWriteOnce cache volume: never run two pods, and
+  # tear the old one down before starting the new one.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: google-calendar-sync
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: google-calendar-sync
+    spec:
+      containers:
+        - name: sync
+          # Placeholder GHCR reference; the real image path/tag is fixed later.
+          image: ghcr.io/rubenlwf/google-calendar-to-mailcow:latest
+          envFrom:
+            - configMapRef:
+                name: google-calendar-sync-config
+          volumeMounts:
+            - name: people
+              mountPath: /config/people
+              readOnly: true
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+      volumes:
+        - name: people
+          secret:
+            secretName: google-calendar-sync-people
+        - name: data
+          persistentVolumeClaim:
+            claimName: google-calendar-sync-data

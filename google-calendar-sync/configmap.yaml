@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: google-calendar-sync-config
+  labels:
+    app.kubernetes.io/name: google-calendar-sync
+data:
+  # Shared defaults injected into the sync loop (docker-compose `environment:`).
+  # A person's own <name>.env may override the date-window vars.
+  SYNC_INTERVAL: "900"
+  TZ: Europe/Amsterdam
+  GCAL_CUTOFF_DATE: "2026-07-01"
+  GCAL_CUTOFF_END_DATE: "2027-06-30"
