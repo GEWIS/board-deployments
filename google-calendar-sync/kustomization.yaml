@@ -3,6 +3,6 @@ kind: Kustomization
 
 resources:
   - configmap.yaml
-  - secret.yaml
+  - secret.sealed.yaml
   - pvc.yaml
   - deployment.yaml
