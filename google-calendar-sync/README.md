@@ -21,5 +21,3 @@ kubeseal --cert https://sealed-secrets.gewis.nl/v1/cert.pem \
   --format yaml --namespace board \
   < secret.yaml > secret.sealed.yaml
 ```
-
-Then swap `secret.yaml` → `secret.sealed.yaml` in `kustomization.yaml` and commit `secret.sealed.yaml`.
